@@ -128,7 +128,7 @@ def _morans_i_vec_W_sparse(
     x_data: np.ndarray,
     x_indices: np.ndarray,
     N: int,
-    W: np.float_,
+    W: np.float64,
 ) -> float:
     x = np.zeros(N, dtype=x_data.dtype)
     x[x_indices] = x_data
@@ -141,7 +141,7 @@ def _morans_i_vec_W(
     g_indices: np.ndarray,
     g_indptr: np.ndarray,
     x: np.ndarray,
-    W: np.float_,
+    W: np.float64,
 ) -> float:
     z = x - x.mean()
     z2ss = (z * z).sum()
@@ -178,7 +178,7 @@ def _morans_i_mtx(
     M, N = X.shape
     assert N == len(g_indptr) - 1
     W = g_data.sum()
-    out = np.zeros(M, dtype=np.float_)
+    out = np.zeros(M, dtype=np.float64)
     for k in prange(M):
         x = X[k, :]
         out[k] = _morans_i_vec_W(g_data, g_indices, g_indptr, x, W)
@@ -197,7 +197,7 @@ def _morans_i_mtx_csr(
 ) -> np.ndarray:
     M, N = X_shape
     W = g_data.sum()
-    out = np.zeros(M, dtype=np.float_)
+    out = np.zeros(M, dtype=np.float64)
     x_data_list = np.split(X_data, X_indptr[1:-1])
     x_indices_list = np.split(X_indices, X_indptr[1:-1])
     for k in prange(M):
@@ -222,7 +222,7 @@ def _morans_i_mtx_csr(
 def _morans_i(g, vals) -> np.ndarray:
     assert g.shape[0] == g.shape[1], "`g` should be a square adjacency matrix"
     vals = _resolve_vals(vals)
-    g_data = g.data.astype(np.float_, copy=False)
+    g_data = g.data.astype(np.float64, copy=False)
     if isinstance(vals, sparse.csr_matrix):
         assert g.shape[0] == vals.shape[1]
         new_vals, idxer, full_result = _check_vals(vals)
@@ -230,7 +230,7 @@ def _morans_i(g, vals) -> np.ndarray:
             g_data,
             g.indices,
             g.indptr,
-            new_vals.data.astype(np.float_, copy=False),
+            new_vals.data.astype(np.float64, copy=False),
             new_vals.indices,
             new_vals.indptr,
             new_vals.shape,
@@ -247,7 +247,7 @@ def _morans_i(g, vals) -> np.ndarray:
             g_data,
             g.indices,
             g.indptr,
-            new_vals.astype(np.float_, copy=False),
+            new_vals.astype(np.float64, copy=False),
         )
         full_result[idxer] = result
         return full_result
