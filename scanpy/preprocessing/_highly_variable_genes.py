@@ -282,6 +282,7 @@ def _highly_variable_genes_single_batch(
             f'normalized dispersion cutoff of {disp_cut_off}'
         )
     else:
+        dispersion_norm = np.array(dispersion_norm, dtype=float, copy=True)
         dispersion_norm[np.isnan(dispersion_norm)] = 0  # similar to Seurat
         gene_subset = np.logical_and.reduce(
             (
